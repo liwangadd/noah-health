@@ -11,10 +11,9 @@ import com.noahhealth.util.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import tk.mybatis.mapper.entity.Example;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by zlren on 17/7/19.
@@ -86,12 +85,15 @@ public class OriginCategoryController {
     @RequestMapping(value = "level", method = RequestMethod.GET)
     public CommonResult queryOriginFirstSecondLevel() {
 
-        Map<String, List<OriginCategorySecond>> result = new HashMap<>();
+//        Map<String, List<OriginCategorySecond>> content = new HashMap<>();
+        List<Map<String, Object>> result = new ArrayList<>();
 
-        List<OriginCategoryFirst> originCategoryFirstList = this.originCategoryFirstService.queryListByWhere(null);
+//        List<OriginCategoryFirst> originCategoryFirstList = this.originCategoryFirstService.queryListByWhere(null);
+        Example example = new Example(OriginCategoryFirst.class);
+        example.setOrderByClause("order_index asc");
+        List<OriginCategoryFirst> originCategoryFirstList = this.originCategoryFirstService.getMapper().selectByExample(example);
 
         originCategoryFirstList.forEach(originCategoryFirst -> {
-
             OriginCategorySecond originCategorySecond = new OriginCategorySecond();
             originCategorySecond.setFirstId(originCategoryFirst.getId());
 
@@ -99,10 +101,13 @@ public class OriginCategoryController {
 
             // 如果一个大类不存在亚类，不把它加入到level中
             if (originCategorySecondList != null && originCategorySecondList.size() > 0) {
-                result.put(originCategoryFirst.getName(), originCategorySecondList);
+                Map<String, Object> item = new HashMap<>();
+                item.put("typeName", originCategoryFirst.getName());
+                item.put("secondList", originCategorySecondList);
+//                result.put(originCategoryFirst.getName(), originCategorySecondList);
+                result.add(item);
             }
         });
-
         return CommonResult.success("查询成功", result);
     }
 

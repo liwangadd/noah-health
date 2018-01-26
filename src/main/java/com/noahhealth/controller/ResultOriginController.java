@@ -203,7 +203,7 @@ public class ResultOriginController {
         }
 
         List<ResultOrigin> resultOriginList = this.resultOriginService.queryResultOriginList(null, identity, pageNow,
-                pageSize, status, userName, uploaderName, checkerName, memberNum, beginTime, endTime, secondId );
+                pageSize, status, userName, uploaderName, checkerName, memberNum, beginTime, endTime, -1);
 
 
         PageResult pageResult = new PageResult(new PageInfo<>(resultOriginList));

@@ -175,8 +175,6 @@ public class UserController {
         if (!Validator.checkEmpty(role)) {
             if (this.userService.checkMember(user.getRole()) && this.userService.checkMember(role)) {
                 // 以前是会员，现在也是会员
-
-
             } else if (
                     this.userService.checkStaff(user.getRole()) // 以前是员工
                             &&
@@ -257,8 +255,6 @@ public class UserController {
                         return CommonResult.failure("未指定主管");
                     }
                 }
-
-
             } else if (user.getRole().equals(Constant.ADMIN) && !role.equals(Constant.ADMIN)) {
                 // 以前是admin现在不是了
                 // 必须保证系统中永远存在ADMIN
@@ -268,12 +264,10 @@ public class UserController {
                 List<User> adminList = this.userService.queryListByWhere(record);
                 if (adminList != null && adminList.size() >= 2) {
                     // 可以修改
-
                 } else {
                     return CommonResult.failure("修改失败：系统中必须存在至少一个系统管理员");
                 }
             }
-
             user.setRole(role);
         }
 
@@ -386,10 +380,8 @@ public class UserController {
             user.setUsername(phone);
         }
 
-
         // 设置新增的详细个人信息
         this.userService.setUserExtendInfo(params, user);
-
 
         this.userService.update(user);
         return CommonResult.success("修改成功");

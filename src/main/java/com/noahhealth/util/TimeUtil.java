@@ -2,6 +2,7 @@ package com.noahhealth.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -51,7 +52,6 @@ public class TimeUtil {
     public static Date getCurrentTime() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String format = simpleDateFormat.format(new Date());
-
         Date parse = null;
         try {
             parse = simpleDateFormat.parse(format);

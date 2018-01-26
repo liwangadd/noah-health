@@ -151,7 +151,8 @@ public class ResultOriginService extends BaseService<ResultOrigin> {
 
 
         PageHelper.startPage(pageNow, pageSize);
-        return this.getMapper().selectByExample(example);
+        List<ResultOrigin> resultOriginList = this.getMapper().selectByExample(example);
+        return resultOriginList;
     }
 
 
