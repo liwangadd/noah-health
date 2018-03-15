@@ -144,7 +144,7 @@ public class UserController {
         Integer userId = (Integer) params.get("userId");
         // 修改别的用户的时候不能修改name和phone
         String name = (String) params.get(Constant.NAME);
-        // String phone = (String) params.get(Constant.PHONE);
+        String phone = (String) params.get(Constant.PHONE);
         String role = (String) params.get(Constant.ROLE);
         Integer adviserId = (Integer) params.get(Constant.STAFF_ID);
         Integer staffMgrId = (Integer) params.get(Constant.STAFF_MGR_ID);
@@ -169,6 +169,10 @@ public class UserController {
 
         if (date != null) {
             user.setValid(date);
+        }
+
+        if(!Validator.checkEmpty(phone)){
+            user.setUsername(phone);
         }
 
         // role

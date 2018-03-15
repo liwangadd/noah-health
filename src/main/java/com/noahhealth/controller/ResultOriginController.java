@@ -16,6 +16,8 @@ import com.noahhealth.util.TimeUtil;
 import com.noahhealth.util.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.fileupload.util.Streams;
+import org.aspectj.apache.bcel.Constants;
+import org.aspectj.apache.bcel.classfile.ConstantString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -150,6 +152,39 @@ public class ResultOriginController {
         return CommonResult.success("添加成功", resultOrigin.getId());
     }
 
+    @RequestMapping(method = RequestMethod.PUT)
+    public CommonResult editResultOriginRecord( @RequestBody Map<String, Object> params){
+        Integer originId = (Integer) params.get("originId");
+        String note = (String) params.get(Constant.NOTE);
+        String normal = (String) params.get("normal");
+        String hospital = (String) params.get("hospital");
+        Date time;
+        try {
+            time = new SimpleDateFormat("yyyy-MM-dd").parse((String) params.get(Constant.TIME));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return CommonResult.failure("添加失败，日期解析错误");
+        }
+        ResultOrigin origin = this.resultOriginService.queryById(originId);
+        if(origin == null){
+            log.info("原始资料: {} 不存在", originId);
+            return CommonResult.failure("原始资料不存在");
+        }
+        if(!Validator.checkEmpty(note)){
+            origin.setNote(note);
+        }
+        if(!Validator.checkEmpty(normal)){
+            origin.setNormal(normal);
+        }
+        if(!Validator.checkEmpty(hospital)){
+            origin.setHospital(hospital);
+        }
+        log.info("资料ID: {} 资料名称: {} 医院名称: {} 检查时间: {} 是否正常: {}", originId, note, hospital, time, normal);
+        origin.setTime(time);
+        this.resultOriginService.update(origin);
+        return CommonResult.success("修改成功");
+    }
+
 
     /**
      * 删除原始数据
@@ -203,7 +238,7 @@ public class ResultOriginController {
         }
 
         List<ResultOrigin> resultOriginList = this.resultOriginService.queryResultOriginList(null, identity, pageNow,
-                pageSize, status, userName, uploaderName, checkerName, memberNum, beginTime, endTime, -1);
+                pageSize, status, userName, uploaderName, checkerName, memberNum, beginTime, endTime, secondId);
 
 
         PageResult pageResult = new PageResult(new PageInfo<>(resultOriginList));
