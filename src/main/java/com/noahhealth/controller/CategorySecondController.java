@@ -43,11 +43,12 @@ public class CategorySecondController {
     @RequestMapping(value = "{secondId}", method = RequestMethod.GET)
     public CommonResult queryCategorySecondById(@PathVariable("secondId") Integer secondId) {
 
-        if (this.categorySecondService.queryById(secondId) == null) {
+        CategorySecond categorySecond = categorySecondService.queryById(secondId);
+        if (categorySecond == null) {
             return CommonResult.failure("查询失败，不存在的亚类");
         }
 
-        return CommonResult.success("查询成功", this.categorySecondService.queryById(secondId));
+        return CommonResult.success("查询成功", categorySecond);
     }
 
 

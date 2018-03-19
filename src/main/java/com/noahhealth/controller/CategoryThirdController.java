@@ -41,11 +41,12 @@ public class CategoryThirdController {
     @RequestMapping(value = "{thirdId}", method = RequestMethod.GET)
     public CommonResult queryCategoryThirdById(@PathVariable("thirdId") Integer thirdId) {
 
-        if (this.categoryThirdService.queryById(thirdId) == null) {
+        CategoryThird categoryThird = categoryThirdService.queryById(thirdId);
+        if (categoryThird == null) {
             return CommonResult.failure("查询失败，不存在的检查项目");
         }
 
-        return CommonResult.success("查询成功", this.categoryThirdService.queryById(thirdId));
+        return CommonResult.success("查询成功", categoryThird);
     }
 
 

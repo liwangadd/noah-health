@@ -33,8 +33,6 @@ public class HealthCategoryController {
 
     /**
      * 分级查询
-     *
-     * @return
      */
     @RequestMapping(value = "level", method = RequestMethod.GET)
     public CommonResult queryHealthCategoryLevel() {
@@ -49,9 +47,9 @@ public class HealthCategoryController {
         Map<String, List<HealthCategorySecond>> result = new LinkedHashMap<>();
 
         // 用for是保证顺序
-        for (int i = 0; i < healthCategoryFirstList.size(); i++) {
+        for (HealthCategoryFirst healthCategoryFirst : healthCategoryFirstList) {
 
-            Integer firstId = healthCategoryFirstList.get(i).getId();
+            Integer firstId = healthCategoryFirst.getId();
 
             HealthCategorySecond second = new HealthCategorySecond();
             second.setFirstId(firstId);
@@ -60,7 +58,7 @@ public class HealthCategoryController {
 
             // 只返回有亚类的健康摘要大类
             if (healthCategorySecondList != null && healthCategorySecondList.size() > 0) {
-                result.put(healthCategoryFirstList.get(i).getName(), healthCategorySecondList);
+                result.put(healthCategoryFirst.getName(), healthCategorySecondList);
             }
         }
 

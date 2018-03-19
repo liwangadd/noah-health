@@ -18,6 +18,7 @@ import com.noahhealth.util.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.fileupload.util.Streams;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tk.mybatis.mapper.entity.Example;
@@ -65,7 +66,7 @@ public class UserController {
 
         User user = new User();
 
-        if (Validator.checkEmpty(name) || Validator.checkEmpty(phone) || Validator.checkEmpty(role) ||
+        if (StringUtils.isEmpty(name) || StringUtils.isEmpty(phone) || StringUtils.isEmpty(role) ||
                 (this.userService.checkMember(role) && staffId == null)) { // 会员却没有设置staffId
             return CommonResult.failure("添加失败，信息不完整");
         } else {
@@ -74,7 +75,7 @@ public class UserController {
             user.setRole(role);
         }
 
-        if (!Validator.checkEmpty(memberNum)) {
+        if (!StringUtils.isEmpty(memberNum)) {
             user.setMemberNum(memberNum);
         }
 
@@ -159,11 +160,11 @@ public class UserController {
         // 设置新增的详细个人信息
         this.userService.setUserExtendInfo(params, user);
 
-        if (!Validator.checkEmpty(name)) {
+        if (!StringUtils.isEmpty(name)) {
             user.setName(name);
         }
 
-        if (!Validator.checkEmpty(memberNum)) {
+        if (!StringUtils.isEmpty(memberNum)) {
             user.setMemberNum(memberNum);
         }
 
@@ -171,12 +172,12 @@ public class UserController {
             user.setValid(date);
         }
 
-        if(!Validator.checkEmpty(phone)){
+        if (!StringUtils.isEmpty(phone)) {
             user.setUsername(phone);
         }
 
         // role
-        if (!Validator.checkEmpty(role)) {
+        if (!StringUtils.isEmpty(role)) {
             if (this.userService.checkMember(user.getRole()) && this.userService.checkMember(role)) {
                 // 以前是会员，现在也是会员
             } else if (
@@ -356,11 +357,11 @@ public class UserController {
         // 未修改的user
         User user = this.userService.queryById(userId);
 
-        if (!Validator.checkEmpty(name)) {
+        if (!StringUtils.isEmpty(name)) {
             user.setName(name);
         }
 
-        if (!Validator.checkEmpty(phone)) {
+        if (!StringUtils.isEmpty(phone)) {
 
             User record = new User();
             record.setUsername(phone);
@@ -498,7 +499,7 @@ public class UserController {
         User user = this.userService.queryById(userId);
 
         // 找回密码的时候没有oldPassword
-        if (!Validator.checkEmpty(oldPassword)) {
+        if (!StringUtils.isEmpty(oldPassword)) {
             String oldPasswordMD5;
             try {
                 oldPasswordMD5 = MD5Util.generate(oldPassword);

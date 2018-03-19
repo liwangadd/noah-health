@@ -134,11 +134,11 @@ public class ResultInputController {
     @RequiredRoles(roles = {"系统管理员", "档案部员工", "档案部主管"})
     public CommonResult deleteResultInputById(@PathVariable("inputId") Integer inputId, HttpSession session) {
 
-        Identity identity = (Identity) session.getAttribute(Constant.IDENTITY);
-        String identityRole = identity.getRole();
-        String identityId = identity.getId();
-
-        ResultInput resultInput = this.resultInputService.queryById(inputId);
+//        Identity identity = (Identity) session.getAttribute(Constant.IDENTITY);
+//        String identityRole = identity.getRole();
+//        String identityId = identity.getId();
+//
+//        ResultInput resultInput = this.resultInputService.queryById(inputId);
 
         // if (this.userService.checkArchiver(identityRole)) {
         //     // 如果是档案部员工，这条记录必须是他创建的

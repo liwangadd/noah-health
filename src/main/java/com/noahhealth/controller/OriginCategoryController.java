@@ -13,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zlren on 17/7/19.
@@ -33,8 +36,7 @@ public class OriginCategoryController {
     /**
      * 添加原始资料分类的大类
      *
-     * @param params
-     * @return
+     * @param params 请求参数
      */
     @RequestMapping(value = "first", method = RequestMethod.POST)
     public CommonResult addOriginCategoryFirst(@RequestBody Map<String, String> params) {
@@ -55,8 +57,7 @@ public class OriginCategoryController {
     /**
      * 添加原始资料分类的亚类
      *
-     * @param params
-     * @return
+     * @param params 请求参数
      */
     @RequestMapping(value = "second", method = RequestMethod.POST)
     public CommonResult addOriginCategorySecond(@RequestBody Map<String, Object> params) {
@@ -80,7 +81,6 @@ public class OriginCategoryController {
     /**
      * 分级查询
      *
-     * @return
      */
     @RequestMapping(value = "level", method = RequestMethod.GET)
     public CommonResult queryOriginFirstSecondLevel() {
@@ -115,22 +115,20 @@ public class OriginCategoryController {
     /**
      * 删除一个资料大类
      *
-     * @param firstId
-     * @return
+     * @param firstId 大类ID
      */
     @RequestMapping(value = "first/{firstId}", method = RequestMethod.DELETE)
     public CommonResult deleteOriginCategoryFist(@PathVariable("firstId") Integer firstId) {
 
         OriginCategorySecond originCategorySecond = new OriginCategorySecond();
         originCategorySecond.setFirstId(firstId);
-        Integer count = this.originCategorySecondService.queryCountByWhere(originCategorySecond);
-
-        if (count > 0) {
-            return CommonResult.failure("存在资料亚类，无法删除");
-        }
 
         if (this.originCategoryFirstService.queryById(firstId) == null) {
             return CommonResult.failure("删除失败，不存在的资料主类");
+        }
+        Integer count = this.originCategorySecondService.queryCountByWhere(originCategorySecond);
+        if (count > 0) {
+            return CommonResult.failure("存在资料亚类，无法删除");
         }
 
         this.originCategoryFirstService.deleteById(firstId);
@@ -141,7 +139,6 @@ public class OriginCategoryController {
     /**
      * 查询原始数据大类列表
      *
-     * @return
      */
     @RequestMapping(value = "first/list", method = RequestMethod.GET)
     public CommonResult queryOriginCategoryFirstList() {
@@ -152,8 +149,7 @@ public class OriginCategoryController {
     /**
      * 根据firstId分页查询亚类
      *
-     * @param params
-     * @return
+     * @param params 请求参数
      */
     @RequestMapping(value = "second/{firstId}/list", method = RequestMethod.POST)
     public CommonResult queryOriginCategorySecondListByFirstId(@RequestBody Map<String, Integer> params, @PathVariable("firstId") Integer firstId) {
@@ -172,8 +168,7 @@ public class OriginCategoryController {
     /**
      * 删除一个资料亚类
      *
-     * @param secondId
-     * @return
+     * @param secondId 亚类ID
      */
     @RequestMapping(value = "second/{secondId}", method = RequestMethod.DELETE)
     public CommonResult deleteOriginCategorySecond(@PathVariable("secondId") Integer secondId) {

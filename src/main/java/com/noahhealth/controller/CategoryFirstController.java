@@ -40,11 +40,13 @@ public class CategoryFirstController {
     @RequestMapping(value = "{firstId}", method = RequestMethod.GET)
     public CommonResult queryCategoryFirstById(@PathVariable("firstId") Integer firstId) {
 
-        if (this.categoryFirstService.queryById(firstId) == null) {
+        CategoryFirst categoryFirst = this.categoryFirstService.queryById(firstId);
+
+        if (categoryFirst == null) {
             return CommonResult.failure("查询失败，不存在的大类");
         }
 
-        return CommonResult.success("查询成功", this.categoryFirstService.queryById(firstId));
+        return CommonResult.success("查询成功", categoryFirst);
     }
 
     /**
@@ -88,14 +90,13 @@ public class CategoryFirstController {
 
         CategorySecond categorySecond = new CategorySecond();
         categorySecond.setFirstId(firstId);
-        List<CategorySecond> categorySeconds = this.categorySecondService.queryListByWhere(categorySecond);
-
-        if (categorySeconds != null && categorySeconds.size() > 0) {
-            return CommonResult.failure("存在亚类，无法删除");
-        }
 
         if (this.categoryFirstService.queryById(firstId) == null) {
             return CommonResult.failure("删除失败，不存在的大类");
+        }
+        List<CategorySecond> categorySeconds = this.categorySecondService.queryListByWhere(categorySecond);
+        if (categorySeconds != null && categorySeconds.size() > 0) {
+            return CommonResult.failure("存在亚类，无法删除");
         }
 
         this.categoryFirstService.deleteById(firstId);
