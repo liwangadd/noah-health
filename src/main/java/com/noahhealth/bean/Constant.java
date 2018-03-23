@@ -44,6 +44,7 @@ public class Constant {
 
     public static String TYPE = "type";
     public static String NAME = "name";
+    public static String NUMBER = "number";
 
     public static String PAGE_NOW = "pageNow";
     public static String PAGE_SIZE = "pageSize";

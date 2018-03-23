@@ -20,4 +20,6 @@ public class CategorySecond {
 
     private String name;
 
+    private String number;
+
 }

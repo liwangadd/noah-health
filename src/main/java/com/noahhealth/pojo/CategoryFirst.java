@@ -21,4 +21,6 @@ public class CategoryFirst {
     private String type;
 
     private String name;
+
+    private String number;
 }
