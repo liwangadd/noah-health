@@ -15,10 +15,12 @@ import com.noahhealth.service.*;
 import com.noahhealth.util.TimeUtil;
 import com.noahhealth.util.Validator;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.fileupload.util.Streams;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.servlet.http.HttpSession;
@@ -54,6 +56,9 @@ public class ResultInputController {
 
     @Autowired
     private PropertyService propertyService;
+
+    @Autowired
+    private ResultInputFileService resultInputFileService;
 
 
     /**
@@ -465,6 +470,85 @@ public class ResultInputController {
             return CommonResult.failure("参数错误");
         }
 
+    }
+
+    /**
+     * 获取记录附件
+     *
+     * @param inputId 亚类ID
+     * @return
+     */
+    @RequestMapping(value = "file/{inputId}", method = RequestMethod.GET)
+    public CommonResult queryFileListByInputId(@PathVariable("inputId") Integer inputId) {
+        ResultInput resultInput = this.resultInputService.queryById(inputId);
+        if (resultInput == null) {
+            return CommonResult.failure("查询失败，不存在的记录");
+        }
+
+        ResultInputFile record = new ResultInputFile();
+        record.setInputId(inputId);
+        List<ResultInputFile> resultInputFiles = this.resultInputFileService.queryListByWhere(record);
+
+        List<Map<String, String>> result = new ArrayList<>();
+        resultInputFiles.forEach(filePath -> {
+            Map<String, String> map = new HashMap<>();
+            map.put("name", filePath.getPath().split("_")[2]);
+            map.put("url", "/origin/" + filePath.getPath());
+            result.add(map);
+        });
+        return CommonResult.success("查询成功", result);
+    }
+
+    /**
+     * 上传文件
+     * @param file
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "upload", method = RequestMethod.POST)
+    public CommonResult addResultInputFile(@RequestParam("file") MultipartFile file, Integer id) {
+        ResultInput resultInput = resultInputService.queryById(id);
+        if (resultInput == null) {
+            return CommonResult.failure("上传失败，记录不存在");
+        }
+        String fileName;
+        if (!file.isEmpty()) {
+            String inputFileName = file.getOriginalFilename();
+            if (inputFileName.contains("_") || inputFileName.contains("/")) {
+                return CommonResult.failure("上传失败，文件名包含特殊字符");
+            }
+            String preFileName = id + "_" + UUID.randomUUID().toString().replaceAll("-", "").substring(0, 6);
+            fileName = preFileName + "_" + file.getOriginalFilename();
+            try {
+                Streams.copy(file.getInputStream(), new FileOutputStream(this.propertyService.filePath + "input/" + fileName), true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ResultInputFile resultInputFile = new ResultInputFile();
+            resultInputFile.setInputId(id);
+            resultInputFile.setPath(fileName);
+            this.resultInputFileService.save(resultInputFile);
+        } else {
+            return CommonResult.failure("文件上传失败");
+        }
+        return CommonResult.success("文件上传成功", "/input/" + fileName);
+    }
+
+    @RequestMapping(value = "file/{inputId}", method = RequestMethod.DELETE)
+    public CommonResult deleteFileByInputId(@PathVariable("inputId") Integer inputId, @RequestBody Map<String, String> params){
+        ResultInput resultInput = resultInputService.queryById(inputId);
+        if(resultInput==null){
+            return CommonResult.failure("删除失败，不存在的记录");
+        }
+        String fileName = params.get("fileName");
+        if(Validator.checkEmpty(fileName)){
+            return CommonResult.failure("删除失败，缺少参数");
+        }
+        ResultInputFile record = new ResultInputFile();
+        record.setInputId(inputId);
+        record.setPath(fileName);
+        this.resultInputFileService.deleteByWhere(record);
+        return CommonResult.success("删除成功");
     }
 
 
