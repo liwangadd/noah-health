@@ -467,10 +467,14 @@ public class UserController {
         String phone = (String) params.get(Constant.PHONE);
         String name = (String) params.get(Constant.NAME);
         String memberNum = (String) params.get("memberNum");
+        String advisorName = (String) params.get("advisor");
+        Date beginTime = TimeUtil.parseTime((String) params.get("beginTime"));
+        Date endTime = TimeUtil.parseTime((String) params.get("endTime"));
 
+        //获取用户身份标识
         Identity identity = (Identity) session.getAttribute(Constant.IDENTITY);
-
-        List<User> userList = this.userService.queryUserList(pageNow, pageSize, role, phone, name, memberNum, type,
+        //根据条件查询用户列表
+        List<User> userList = this.userService.queryUserList(pageNow, pageSize, role, phone, name, memberNum, advisorName, beginTime, endTime, type,
                 identity);
         PageResult pageResult = new PageResult(new PageInfo<>(userList));
 

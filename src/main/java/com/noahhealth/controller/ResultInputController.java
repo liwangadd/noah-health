@@ -449,6 +449,7 @@ public class ResultInputController {
 
             resultInput.setStatus(Constant.WEI_TONG_GUO);
             resultInput.setReason(reason);
+            resultInput.setCheckTime(new Date());
             this.resultInputService.update(resultInput);
 
             return CommonResult.success("操作成功");
@@ -463,6 +464,7 @@ public class ResultInputController {
             resultInput.setCheckerId(checkerId);
 
             resultInput.setStatus(Constant.YI_TONG_GUO);
+            resultInput.setCheckTime(new Date());
             this.resultInputService.update(resultInput);
 
             return CommonResult.success("操作成功");

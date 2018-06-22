@@ -37,6 +37,9 @@ public class ResultInput {
     @Column(name = "checker_id")
     private Integer checkerId;
 
+    @Column(name = "check_time")
+    private Date checkTime;
+
     private String status;
 
     private String note;

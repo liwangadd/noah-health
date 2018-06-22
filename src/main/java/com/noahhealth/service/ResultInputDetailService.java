@@ -2,7 +2,9 @@ package com.noahhealth.service;
 
 import com.noahhealth.bean.input.ResultInputDetailExtend;
 import com.noahhealth.pojo.CategoryThird;
+import com.noahhealth.pojo.ResultInput;
 import com.noahhealth.pojo.ResultInputDetail;
+import com.noahhealth.util.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +28,14 @@ public class ResultInputDetailService extends BaseService<ResultInputDetail> {
      *
      * @param dataToSaveList
      */
-    public void save(List<ResultInputDetail> dataToSaveList) {
+    public void save(List<ResultInputDetail> dataToSaveList, String note) {
         dataToSaveList.forEach(detail -> this.getMapper().updateByPrimaryKeySelective(detail));
+        if(!Validator.checkEmpty(note)) {
+            Integer inputId = queryById(dataToSaveList.get(0).getId()).getResultInputId();
+            ResultInput input = this.resultInputService.queryById(inputId);
+            input.setNote(note);
+            this.resultInputService.update(input);
+        }
     }
 
     /**

@@ -34,6 +34,9 @@ public class ResultInputDetailController {
 
         List<ResultInputDetail> dataToSaveList = new ArrayList<>();
 
+        String note= params.get("note");
+        params.remove("note");
+
         // 每一条检查记录有两个值，value和normal
         // id-value: value
         // id-normal: true/false
@@ -64,7 +67,7 @@ public class ResultInputDetailController {
         }
 
         // 批量保存，放在Service层去实现感觉稳一些，事务的支持
-        this.resultInputDetailService.save(dataToSaveList);
+        this.resultInputDetailService.save(dataToSaveList, note);
 
         return CommonResult.success("修改成功");
     }

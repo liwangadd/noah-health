@@ -6,12 +6,10 @@ import com.noahhealth.bean.Constant;
 import com.noahhealth.bean.Identity;
 import com.noahhealth.bean.PageResult;
 import com.noahhealth.bean.origin.ResultOriginExtend;
+import com.noahhealth.pojo.OriginCategorySecond;
 import com.noahhealth.pojo.ResultOrigin;
 import com.noahhealth.pojo.ResultOriginFile;
-import com.noahhealth.service.PropertyService;
-import com.noahhealth.service.ResultOriginFileService;
-import com.noahhealth.service.ResultOriginService;
-import com.noahhealth.service.UserService;
+import com.noahhealth.service.*;
 import com.noahhealth.util.TimeUtil;
 import com.noahhealth.util.Validator;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +38,9 @@ public class ResultOriginController {
 
     @Autowired
     private ResultOriginService resultOriginService;
+
+    @Autowired
+    private OriginCategorySecondService originCategorySecondService;
 
     @Autowired
     private UserService userService;
@@ -153,11 +154,12 @@ public class ResultOriginController {
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    public CommonResult editResultOriginRecord( @RequestBody Map<String, Object> params){
+    public CommonResult editResultOriginRecord(@RequestBody Map<String, Object> params) {
         Integer originId = (Integer) params.get("originId");
         String note = (String) params.get(Constant.NOTE);
         String normal = (String) params.get("normal");
         String hospital = (String) params.get("hospital");
+        String secondName = (String) params.get("secondName");
         Date time;
         try {
             time = new SimpleDateFormat("yyyy-MM-dd").parse((String) params.get(Constant.TIME));
@@ -166,19 +168,25 @@ public class ResultOriginController {
             return CommonResult.failure("添加失败，日期解析错误");
         }
         ResultOrigin origin = this.resultOriginService.queryById(originId);
-        if(origin == null){
+        if (origin == null) {
             log.info("原始资料: {} 不存在", originId);
             return CommonResult.failure("原始资料不存在");
         }
-        if(!Validator.checkEmpty(note)){
+        if (!Validator.checkEmpty(note)) {
             origin.setNote(note);
         }
-        if(!Validator.checkEmpty(normal)){
+        if (!Validator.checkEmpty(normal)) {
             origin.setNormal(normal);
         }
-        if(!Validator.checkEmpty(hospital)){
+        if (!Validator.checkEmpty(hospital)) {
             origin.setHospital(hospital);
         }
+
+        OriginCategorySecond categorySecond = this.originCategorySecondService.queryByOriginName(secondName);
+        if(categorySecond!=null){
+            origin.setSecondId(categorySecond.getId());
+        }
+
         log.info("资料ID: {} 资料名称: {} 医院名称: {} 检查时间: {} 是否正常: {}", originId, note, hospital, time, normal);
         origin.setTime(time);
         this.resultOriginService.update(origin);

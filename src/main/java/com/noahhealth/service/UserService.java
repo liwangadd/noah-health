@@ -184,13 +184,22 @@ public class UserService extends BaseService<User> {
      * @return
      */
     public List<User> queryUserList(Integer pageNow, Integer pageSize, String role, String phone, String name, String
-            memberNum, String type, Identity identity) {
+            memberNum, String advisorName, Date beginTime, Date endTime, String type, Identity identity) {
 
         Example example = new Example(User.class);
         Example.Criteria criteria = example.createCriteria();
 
         example.setOrderByClause("field(role,'三级会员','二级会员','一级会员','系统管理员','档案部主管','顾问部主管','档案部员工','顾问部员工', '财务部员工'), " +
                 "member_num desc");
+
+        if (beginTime != null && endTime != null) {
+            criteria.andBetween("valid", beginTime, endTime);
+        }
+
+        if (!Validator.checkEmpty(advisorName)) {
+            Set<Integer> advisorIds = this.getIdSetByUserNameLikeAndRole(advisorName, "顾问部");
+            criteria.andIn("staffId", advisorIds);
+        }
 
         if (!Validator.checkEmpty(name)) {
             criteria.andLike(Constant.NAME, "%" + name + "%");

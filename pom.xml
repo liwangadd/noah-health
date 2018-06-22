@@ -291,9 +291,9 @@
             <version>3.2.2</version>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>com.aliyun</groupId>-->
-            <!--<artifactId>aliyun-java-sdk-dysmsapi</artifactId>-->
-            <!--<version>1.0.0-SNAPSHOT</version>-->
+        <!--<groupId>com.aliyun</groupId>-->
+        <!--<artifactId>aliyun-java-sdk-dysmsapi</artifactId>-->
+        <!--<version>1.0.0-SNAPSHOT</version>-->
         <!--</dependency>-->
         <dependency>
             <groupId>com.github.1991wangliang</groupId>
