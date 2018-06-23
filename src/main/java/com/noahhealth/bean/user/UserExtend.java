@@ -10,6 +10,7 @@ public class UserExtend extends User {
 
     public String staffName;
     public String staffMgrName;
+    public String status;
 
     /**
      * 拓展
@@ -18,10 +19,11 @@ public class UserExtend extends User {
      * @param staffName
      * @param staffMgrName
      */
-    public UserExtend(User user, String staffName, String staffMgrName) {
+    public UserExtend(User user, String staffName, String staffMgrName, String status) {
 
         BeanUtils.copyProperties(user, this);
         this.staffName = staffName;
         this.staffMgrName = staffMgrName;
+        this.status = status;
     }
 }

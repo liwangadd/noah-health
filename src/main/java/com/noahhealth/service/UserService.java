@@ -5,6 +5,7 @@ import com.noahhealth.bean.CommonResult;
 import com.noahhealth.bean.Constant;
 import com.noahhealth.bean.Identity;
 import com.noahhealth.bean.user.UserExtend;
+import com.noahhealth.pojo.ResultHealth;
 import com.noahhealth.pojo.User;
 import com.noahhealth.util.MD5Util;
 import com.noahhealth.util.TokenUtil;
@@ -24,6 +25,9 @@ public class UserService extends BaseService<User> {
 
     @Autowired
     private PropertyService propertyService;
+
+    @Autowired
+    private ResultHealthService resultHealthService;
 
     /**
      * 检查用户名是否重复
@@ -680,7 +684,6 @@ public class UserService extends BaseService<User> {
         return nameLike;
     }
 
-
     /**
      * 拓展user，补全
      *
@@ -704,6 +707,7 @@ public class UserService extends BaseService<User> {
 
         String staffName = null;
         String staffMgrName = null;
+        String status = this.resultHealthService.queryStatusByUserId(user.getId());
 
         user.setPassword(null); // 防止md5值外泄
 
@@ -714,11 +718,23 @@ public class UserService extends BaseService<User> {
             } else {
                 staffName = "<未设置顾问>";
             }
+
+//            ResultHealth record = new ResultHealth();
+//            record.setUserId(user.getId());
+//            record.setStatus("待审核");
+//            if(this.resultHealthService.queryCountByWhere(record)>0){
+//                status = "待审核";
+//            }else{
+//                record.setStatus("录入中");
+//                if(this.resultHealthService.queryCountByWhere(record) > 0){
+//                    status = "录入中";
+//                }
+//            }
         } else if (user.getRole().equals(Constant.ARCHIVER) || user.getRole().equals(Constant.ADVISER)) { // 普通职员
             staffMgrName = this.queryById(user.getStaffMgrId()).getName();
         }
 
-        return new UserExtend(user, staffName, staffMgrName);
+        return new UserExtend(user, staffName, staffMgrName, status);
     }
 
 

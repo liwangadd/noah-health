@@ -94,4 +94,10 @@ public class User {
      */
     @Column(name = "allergy_others")
     private String allergyOthers;
+
+    /**
+     * 健康摘要状态
+     */
+    @Column(name = "health_status")
+    private String healthStatus;
 }

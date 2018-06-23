@@ -101,6 +101,18 @@ public class ResultHealthService extends BaseService<ResultHealth> {
         return this.getMapper().selectByExample(example);
     }
 
+    public String queryStatusByUserId(int userId) {
+        Example example = new Example(ResultHealth.class);
+        Example.Criteria criteria = example.createCriteria();
+        example.setOrderByClause("field(status, '未通过', '待审核', '录入中', '已通过')");
+        criteria.andEqualTo("userId", userId);
+        List<ResultHealth> resultHealths = getMapper().selectByExample(example);
+        if (resultHealths != null && resultHealths.size() > 0) {
+            return resultHealths.get(0).getStatus();
+        }
+        return null;
+    }
+
 
     /**
      * 拓展
@@ -131,4 +143,5 @@ public class ResultHealthService extends BaseService<ResultHealth> {
 
         return resultHealthExtendList;
     }
+
 }
