@@ -61,17 +61,14 @@ public class CategoryFirstController {
 
         String type = params.get(Constant.TYPE);
         String name = params.get(Constant.NAME);
-        String number = params.get(Constant.NUMBER);
-        log.debug(number);
 
-        if (Validator.checkEmpty(type) || Validator.checkEmpty(name) || Validator.checkEmpty(number)) {
+        if (Validator.checkEmpty(type) || Validator.checkEmpty(name)) {
             return CommonResult.failure("添加失败，信息不完整");
         }
 
         CategoryFirst categoryFirst = new CategoryFirst();
         categoryFirst.setName(name);
         categoryFirst.setType(type);
-        categoryFirst.setNumber(number);
 
         if (this.categoryFirstService.queryOne(categoryFirst) != null) {
             return CommonResult.failure("已经存在");
@@ -123,16 +120,14 @@ public class CategoryFirstController {
 
         String type = (String) params.get(Constant.TYPE);
         String name = (String) params.get(Constant.NAME);
-        String number = (String) params.get(Constant.NUMBER);
 
-        if (Validator.checkEmpty(type) || Validator.checkEmpty(name) || Validator.checkEmpty(number)) {
+        if (Validator.checkEmpty(type) || Validator.checkEmpty(name)) {
             return CommonResult.failure("添加失败，信息不完整");
         }
 
         CategoryFirst categoryFirst = new CategoryFirst();
         categoryFirst.setType(type);
         categoryFirst.setName(name);
-        categoryFirst.setNumber(number);
 
         if (this.categoryFirstService.queryOne(categoryFirst) != null) {
             return CommonResult.failure("修改失败，和其他大类重复");

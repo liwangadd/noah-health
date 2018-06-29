@@ -63,10 +63,11 @@ public class CategoryThirdController {
         String name = (String) params.get(Constant.NAME);
         String referenceValue = (String) params.get(Constant.REFERENCE_VALUE);
         String enShort = (String) params.get("enShort");
+        String number = (String) params.get("itemNumber");
 
         // 没有检查hospital是否为空
         if (secondId == null || Validator.checkEmpty(name) || Validator
-                .checkEmpty(referenceValue)) {
+                .checkEmpty(referenceValue) || Validator.checkEmpty(number)) {
             return CommonResult.failure("添加失败，信息不完整");
         }
 
@@ -74,6 +75,7 @@ public class CategoryThirdController {
         categoryThird.setSecondId(secondId);
         categoryThird.setName(name);
         categoryThird.setEnShort(enShort);
+        categoryThird.setNumber(number);
 
         if (this.categoryThirdService.queryOne(categoryThird) != null) {
             return CommonResult.failure("添加失败，已经存在的检查项目");

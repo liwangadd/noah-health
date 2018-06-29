@@ -28,4 +28,6 @@ public class CategoryThird {
     @Column(name = "reference_value")
     private String referenceValue;
 
+    private String number;
+
 }

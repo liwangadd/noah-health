@@ -63,16 +63,14 @@ public class CategorySecondController {
 
         Integer firstId = (Integer) params.get(Constant.FIRST_ID);
         String name = (String) params.get(Constant.NAME);
-        String number = (String) params.get(Constant.NUMBER);
 
-        if (firstId == null || Validator.checkEmpty(name) || Validator.checkEmpty(number)) {
+        if (firstId == null || Validator.checkEmpty(name)) {
             return CommonResult.failure("添加失败，信息不完整");
         }
 
         CategorySecond categorySecond = new CategorySecond();
         categorySecond.setFirstId(firstId);
         categorySecond.setName(name);
-        categorySecond.setNumber(number);
 
         if (this.categorySecondService.queryOne(categorySecond) != null) {
             return CommonResult.failure("添加失败，已经存在的亚类");
@@ -139,16 +137,14 @@ public class CategorySecondController {
 
         Integer firstId = (Integer) params.get(Constant.FIRST_ID);
         String name = (String) params.get(Constant.NAME);
-        String number = (String) params.get(Constant.NUMBER);
 
         CategorySecond categorySecond = new CategorySecond();
-        if (firstId == null || Validator.checkEmpty(name) || Validator.checkEmpty(number)) {
+        if (firstId == null || Validator.checkEmpty(name)) {
             return CommonResult.failure("修改失败，信息不完整");
         }
 
         categorySecond.setFirstId(firstId);
         categorySecond.setName(name);
-        categorySecond.setNumber(number);
 
         if (this.categorySecondService.queryOne(categorySecond) != null) {
             return CommonResult.failure("修改失败，已经存在的亚类");

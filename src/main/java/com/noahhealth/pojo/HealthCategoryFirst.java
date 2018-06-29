@@ -19,4 +19,6 @@ public class HealthCategoryFirst {
     private Integer id;
 
     private String name;
+
+    private String type;
 }

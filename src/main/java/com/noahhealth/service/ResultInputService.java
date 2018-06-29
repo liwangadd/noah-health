@@ -336,7 +336,9 @@ public class ResultInputService extends BaseService<ResultInput> {
         Example example = new Example(ResultInput.class);
         Example.Criteria criteria = example.createCriteria();
 
-        example.setOrderByClause("time DESC"); // 倒叙
+        example.setOrderByClause("field(status, '未通过', '待审核', '录入中', '已通过'), time DESC");
+
+//        example.setOrderByClause("time DESC"); // 倒叙
 
         {   // 时间和状态的筛选是统一的
 
