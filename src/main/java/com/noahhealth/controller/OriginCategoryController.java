@@ -80,7 +80,6 @@ public class OriginCategoryController {
 
     /**
      * 分级查询
-     *
      */
     @RequestMapping(value = "level", method = RequestMethod.GET)
     public CommonResult queryOriginFirstSecondLevel() {
@@ -138,7 +137,6 @@ public class OriginCategoryController {
 
     /**
      * 查询原始数据大类列表
-     *
      */
     @RequestMapping(value = "first/list", method = RequestMethod.GET)
     public CommonResult queryOriginCategoryFirstList() {

@@ -96,8 +96,94 @@ public class User {
     private String allergyOthers;
 
     /**
-     * 健康摘要状态
+     * 血型
      */
-    @Column(name = "health_status")
-    private String healthStatus;
+    @Column(name = "blood_type")
+    private String bloodType;
+
+    /**
+     * 基础体温
+     */
+    @Column(name = "base_temperature")
+    private String baseTemperature;
+
+    /**
+     * 呼吸
+     */
+    private String breath;
+
+    /**
+     * 血压
+     */
+    @Column(name = "blood_pressure")
+    private String bloodPressure;
+
+    /**
+     * 心率
+     */
+    @Column(name = "heart_rate")
+    private String heartRate;
+
+    /**
+     * 心律
+     */
+    @Column(name = "heart_rate2")
+    private String heartRate2;
+
+    /**
+     * 身高
+     */
+    private String height;
+
+    /**
+     * 体重
+     */
+    private String weight;
+
+    /**
+     * 体重指数
+     */
+    @Column(name = "weight_rate")
+    private String weightRate;
+
+    /**
+     * 腰围
+     */
+    @Column(name = "waist_circum")
+    private String waistCircum;
+
+    /**
+     * 臂围
+     */
+    @Column(name = "arm_circum")
+    private String armCircum;
+
+    private String surgery;
+
+    /**
+     * 腰臂比
+     */
+    @Column(name = "waist_arm_rate")
+    private String waistArmRate;
+
+    /**
+     * 家族史
+     */
+    private String family;
+
+    /**
+     * 主要疾病
+     */
+    private String disease;
+
+    /**
+     * 主要用药
+     */
+    private String medication;
+
+    /**
+     * 特殊事项
+     */
+    private String special;
+
 }
