@@ -387,7 +387,7 @@ public class UserController {
 
         // 设置新增的详细个人信息
         this.userService.setUserExtendInfo(params, user);
-
+        System.out.println(user);
         this.userService.update(user);
         return CommonResult.success("修改成功");
     }
