@@ -34,7 +34,7 @@ public class ResultInputDetailController {
 
         List<ResultInputDetail> dataToSaveList = new ArrayList<>();
 
-        String note= params.get("note");
+        String note = params.get("note");
         params.remove("note");
 
         // 每一条检查记录有两个值，value和normal
@@ -48,19 +48,22 @@ public class ResultInputDetailController {
 
                 ResultInputDetail resultInputDetail = new ResultInputDetail();
                 resultInputDetail.setId(Integer.valueOf(split[0]));
-                if (split[1].equals("normal")) {
-                    if (next.getValue().equals("true")) {
-                        resultInputDetail.setNormal(true);
-                    } else {
-                        resultInputDetail.setNormal(false);
-                    }
-                } else if (split[1].equals("value")) {
-                    resultInputDetail.setValue(next.getValue());
+                switch (split[1]) {
+                    case "normal":
+                        if (next.getValue().equals("true")) {
+                            resultInputDetail.setNormal(true);
+                        } else {
+                            resultInputDetail.setNormal(false);
+                        }
+                        break;
+                    case "value":
+                        resultInputDetail.setValue(next.getValue());
+                        break;
+                    case "note":
+                        // 取消掉了
+                        resultInputDetail.setNote(next.getValue());
+                        break;
                 }
-                // else if (split[1].equals("note")) {
-                //     // 取消掉了
-                //     // resultInputDetail.setNote(next.getValue());
-                // }
 
                 dataToSaveList.add(resultInputDetail);
             }

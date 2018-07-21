@@ -25,4 +25,6 @@ public class ResultInputDetail {
      * 是否异常
      */
     private Boolean normal;
+
+    private String note;
 }

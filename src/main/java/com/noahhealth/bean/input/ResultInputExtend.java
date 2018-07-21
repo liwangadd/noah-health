@@ -16,6 +16,8 @@ public class ResultInputExtend extends ResultInput {
     public String checkerName;
     public String memberNum;
     public String type; // 化验或医技
+    public Integer firstId;
+    public String firstName;
 
     public List<ResultInputDetailExtend> data;
 
@@ -32,7 +34,7 @@ public class ResultInputExtend extends ResultInput {
      * @param type
      */
     public ResultInputExtend(ResultInput resultInput, String userName, String secondName, String
-            inputerName, String checkerName, String memberNum, String type) {
+            inputerName, String checkerName, String memberNum, Integer firstId, String firstName, String type) {
 
         BeanUtils.copyProperties(resultInput, this);
         this.userName = userName;
@@ -41,5 +43,7 @@ public class ResultInputExtend extends ResultInput {
         this.checkerName = checkerName;
         this.memberNum = memberNum;
         this.type = type;
+        this.firstId = firstId;
+        this.firstName = firstName;
     }
 }

@@ -7,6 +7,7 @@ import com.noahhealth.bean.PageResult;
 import com.noahhealth.pojo.*;
 import com.noahhealth.service.HealthCategoryFirstService;
 import com.noahhealth.service.HealthCategorySecondService;
+import com.noahhealth.service.ResultHealthService;
 import com.noahhealth.util.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +32,16 @@ public class HealthCategoryController {
     @Autowired
     private HealthCategorySecondService healthCategorySecondService;
 
+    @Autowired
+    private ResultHealthService resultHealthService;
+
     /**
      * 查询所有大类
+     *
      * @return
      */
     @RequestMapping(value = "first", method = RequestMethod.GET)
-    public CommonResult queryCategoriesFirst(){
+    public CommonResult queryCategoriesFirst() {
         List<HealthCategoryFirst> healthCategoryFirsts = this.healthCategoryFirstService.queryAll();
         return CommonResult.success("查询成功", healthCategoryFirsts);
     }
@@ -61,6 +66,7 @@ public class HealthCategoryController {
 
     /**
      * 删除一个大类
+     *
      * @param firstId
      * @return
      */
@@ -196,6 +202,7 @@ public class HealthCategoryController {
                 pageSize, categorySecond);
         return CommonResult.success("查询成功", new PageResult(categorySecondPageInfo));
     }
+
     /**
      * 根据id查询
      *
@@ -221,6 +228,15 @@ public class HealthCategoryController {
      */
     @RequestMapping(value = "second/{secondId}", method = RequestMethod.DELETE)
     public CommonResult deleteCategorySecond(@PathVariable("secondId") Integer secondId) {
+        ResultHealth resultHealth = new ResultHealth();
+        resultHealth.setSecondId(secondId);
+        List<ResultHealth> resultHealths = resultHealthService.queryListByWhere(resultHealth);
+        if(this.healthCategorySecondService.queryById(secondId)==null){
+            return CommonResult.failure("删除失败，不存在的大类");
+        }
+        if (resultHealths != null && resultHealths.size() > 0) {
+            return CommonResult.failure("存在该类别的健康摘要，无法删除");
+        }
         this.healthCategorySecondService.deleteById(secondId);
         return CommonResult.success("删除成功");
     }

@@ -128,6 +128,21 @@ public class ResultInputController {
         return CommonResult.success("添加成功");
     }
 
+    @RequestMapping(value = "{inputId}", method = RequestMethod.PUT)
+    public CommonResult editResultInput(@RequestBody Map<String, Object> params, @PathVariable("inputId") Integer inputId){
+        String hospital = (String) params.get("hospital");
+        Integer secondId = (Integer) params.get("secondId");
+        Date time = TimeUtil.parseTime((String) params.get(Constant.TIME));
+
+        ResultInput resultInput = this.resultInputService.queryById(inputId);
+        resultInput.setHospital(hospital);
+        resultInput.setSecondId(secondId);
+        resultInput.setTime(time);
+        this.resultInputService.update(resultInput);
+
+        return CommonResult.success("修改成功");
+    }
+
 
     /**
      * 删除input记录，级联删除detail表
@@ -349,7 +364,9 @@ public class ResultInputController {
 
             criteria.andEqualTo("userId", userId);
             criteria.andEqualTo("secondId", sid);
-            criteria.andEqualTo("status", Constant.YI_TONG_GUO);
+            if(identity.getRole().equals(Constant.USER_1) || identity.getRole().equals(Constant.USER_2) || identity.getRole().equals(Constant.USER_3)) {
+                criteria.andEqualTo("status", Constant.YI_TONG_GUO);
+            }
             example.setOrderByClause("time DESC"); // 倒叙
 
             // 时间

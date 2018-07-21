@@ -196,6 +196,8 @@ public class UserService extends BaseService<User> {
         example.setOrderByClause("field(role,'三级会员','二级会员','一级会员','系统管理员','档案部主管','顾问部主管','档案部员工','顾问部员工', '财务部员工'), " +
                 "member_num desc");
 
+        criteria.andNotEqualTo("role", "已删除");
+
         if (beginTime != null && endTime != null) {
             criteria.andBetween("valid", beginTime, endTime);
         }

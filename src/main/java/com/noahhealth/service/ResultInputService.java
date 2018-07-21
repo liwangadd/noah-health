@@ -4,10 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.noahhealth.bean.Constant;
 import com.noahhealth.bean.Identity;
 import com.noahhealth.bean.input.ResultInputExtend;
-import com.noahhealth.pojo.CategoryThird;
-import com.noahhealth.pojo.ResultInput;
-import com.noahhealth.pojo.ResultInputDetail;
-import com.noahhealth.pojo.User;
+import com.noahhealth.pojo.*;
 import com.noahhealth.util.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -201,13 +198,16 @@ public class ResultInputService extends BaseService<ResultInput> {
             checkerNameExtend = this.userService.queryById(resultInput.getCheckerId()).getName();
         }
         String inputerNameExtend = this.userService.queryById(resultInput.getInputerId()).getName();
-        String secondNameExtend = this.categorySecondService.queryById(resultInput.getSecondId()).getName();
+        CategorySecond categorySecond = this.categorySecondService.queryById(resultInput.getSecondId());
+        String secondNameExtend = categorySecond.getName();
+        Integer firstId = categorySecond.getFirstId();
         String memberNum = this.userService.queryById(resultInput.getUserId()).getMemberNum();
-        String type = this.categoryFirstService.queryById(categorySecondService.queryById(resultInput.getSecondId())
-                .getFirstId()).getType();
+        CategoryFirst categoryFirst = this.categoryFirstService.queryById(firstId);
+        String type = categoryFirst.getType();
+        String firstName = categoryFirst.getName();
 
         return new ResultInputExtend(resultInput, userNameExtend, secondNameExtend, inputerNameExtend,
-                checkerNameExtend, memberNum, type);
+                checkerNameExtend, memberNum, firstId, firstName, type);
     }
 
 
